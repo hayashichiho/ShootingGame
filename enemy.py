@@ -37,6 +37,10 @@ class Player:
 
     def draw(self, screen):
         pygame.draw.rect(screen, YELLOW_GREEN, (self.x, self.y, self.width, self.height))
+        point1 = (self.x + self.width // 2, self.y - 20)  # 三角の頂点（上）
+        point2 = (self.x, self.y)                        # 左下
+        point3 = (self.x + self.width, self.y)           # 右下
+        pygame.draw.polygon(screen, YELLOW_GREEN, [point1, point2, point3])
 
 # 弾
 class Bullet:
@@ -58,14 +62,14 @@ class Bullet:
         if self.active:
             pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
-    def check_collision(self, target):
-        if (self.active and target.alive and
-            self.x < target.x + target.width and
-            self.x + self.width > target.x and
-            self.y < target.y + target.height and
-            self.y + self.height > target.y):
+    def check_collision(self, enemy):
+        if (self.active and enemy.alive and
+            self.x < enemy.x + enemy.width and
+            self.x + self.width > enemy.x and
+            self.y < enemy.y + enemy.height and
+            self.y + self.height > enemy.y):
             self.active = False
-            target.alive = False
+            enemy.alive = False
             return True
         return False
 
