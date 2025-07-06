@@ -73,7 +73,13 @@ class Bullet:
             return True
         return False
 
-# 敵（共通）
+# 画像読み込み
+enemy1_img = pygame.image.load("enemy1.png")
+enemy1_img = pygame.transform.scale(enemy1_img, (40, 30))
+enemy2_img = pygame.image.load("enemy2.png")
+enemy2_img = pygame.transform.scale(enemy2_img, (40, 30))
+
+# 敵クラス
 class Enemy:
     def __init__(self, x, y, type_id):
         self.x = x
@@ -101,10 +107,12 @@ class Enemy:
     def reset_shoot_timer(self):
         self.shoot_timer = random.randint(100, 200)
 
-    def draw(self, screen):
+    def draw(self, screen):  
         if self.alive:
-            color = RED if self.type_id == 0 else ORANGE
-            pygame.draw.rect(screen, color, (self.x, self.y, self.width, self.height))
+            if self.type_id == 0:
+                screen.blit(enemy1_img, (self.x, self.y))
+            else:
+                screen.blit(enemy2_img, (self.x, self.y))
 
 # ゲーム本体
 class Game:
