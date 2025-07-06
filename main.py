@@ -1,170 +1,80 @@
+import os
+import subprocess
 import sys
 
-import pygame
+from flask import Flask, jsonify, render_template
 
-# Pygameの初期化
-pygame.init()
+app = Flask(__name__)
 
-# 画面サイズの設定
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("シンプルインベーダーゲーム")
-
-# 色の定義
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-YELLOW_GREEN = (154, 205, 50)
-WHITE = (255, 255, 255)
+# ゲームプロセスを管理するための変数
+game_process = None
 
 
-# プレイヤークラス
-class Player:
-    def __init__(self):
-        self.x = SCREEN_WIDTH // 2
-        self.y = SCREEN_HEIGHT - 50
-        self.width = 50
-        self.height = 30
-        self.speed = 5
+@app.route("/")
+def index():
+    """スタート画面を表示"""
+    return render_template("start.html")
 
-    def move_left(self):
-        if self.x > 0:
-            self.x -= self.speed
 
-    def move_right(self):
-        if self.x < SCREEN_WIDTH - self.width:
-            self.x += self.speed
+@app.route("/start_game")
+def start_game():
+    """シューティングゲームを開始"""
+    global game_process
 
-    def draw(self, screen):
-        pygame.draw.rect(
-            screen, YELLOW_GREEN, (self.x, self.y, self.width, self.height)
+    try:
+        # 既にゲームが実行中の場合は終了
+        if game_process and game_process.poll() is None:
+            game_process.terminate()
+
+        # 新しいゲームプロセスを開始
+        game_script = os.path.join(os.path.dirname(__file__), "sub.py")
+        game_process = subprocess.Popen([sys.executable, game_script])
+
+        return jsonify({"status": "success", "message": "ゲームが開始されました！"})
+
+    except Exception as e:
+        return jsonify(
+            {"status": "error", "message": f"ゲームの開始に失敗しました: {str(e)}"}
         )
 
 
-# 敵クラス
-class Enemy:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.width = 40
-        self.height = 30
-        self.alive = True
+@app.route("/stop_game")
+def stop_game():
+    """ゲームを停止"""
+    global game_process
 
-    def draw(self, screen):
-        if self.alive:
-            pygame.draw.rect(screen, RED, (self.x, self.y, self.width, self.height))
+    try:
+        # ゲームプロセスが実行中の場合は終了
+        if game_process and game_process.poll() is None:
+            game_process.terminate()
+            game_process.wait()
 
+        return jsonify({"status": "success", "message": "ゲームが停止されました"})
 
-# 弾クラス
-class Bullet:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.width = 5
-        self.height = 10
-        self.speed = 7
-        self.active = True
-
-    def update(self):
-        self.y -= self.speed
-        if self.y < 0:
-            self.active = False
-
-    def draw(self, screen):
-        if self.active:
-            pygame.draw.rect(screen, WHITE, (self.x, self.y, self.width, self.height))
-
-    def check_collision(self, enemy):
-        if (
-            self.active
-            and enemy.alive
-            and self.x < enemy.x + enemy.width
-            and self.x + self.width > enemy.x
-            and self.y < enemy.y + enemy.height
-            and self.y + self.height > enemy.y
-        ):
-            self.active = False
-            enemy.alive = False
-            return True
-        return False
+    except Exception as e:
+        return jsonify(
+            {"status": "error", "message": f"ゲームの停止に失敗しました: {str(e)}"}
+        )
 
 
-# ゲームのメインクラス
-class Game:
-    def __init__(self):
-        self.player = Player()
-        self.enemies = []
-        self.bullets = []
-        self.clock = pygame.time.Clock()
+@app.route("/game_status")
+def game_status():
+    """ゲームの実行状態を確認"""
+    global game_process
 
-        # 敵を5体配置
-        for i in range(5):
-            enemy = Enemy(150 + i * 100, 100)
-            self.enemies.append(enemy)
+    is_running = game_process and game_process.poll() is None
 
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    # 弾を発射
-                    bullet = Bullet(
-                        self.player.x + self.player.width // 2 - 2, self.player.y
-                    )
-                    self.bullets.append(bullet)
-
-        # キーの押し続け判定
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.player.move_left()
-        if keys[pygame.K_RIGHT]:
-            self.player.move_right()
-
-        return True
-
-    def update(self):
-        # 弾の更新
-        for bullet in self.bullets[:]:
-            bullet.update()
-            if not bullet.active:
-                self.bullets.remove(bullet)
-            else:
-                # 衝突判定
-                for enemy in self.enemies:
-                    bullet.check_collision(enemy)
-
-    def draw(self):
-        # 背景を黒で塗りつぶし
-        screen.fill(BLACK)
-
-        # プレイヤーを描画
-        self.player.draw(screen)
-
-        # 敵を描画
-        for enemy in self.enemies:
-            enemy.draw(screen)
-
-        # 弾を描画
-        for bullet in self.bullets:
-            bullet.draw(screen)
-
-        # 画面更新
-        pygame.display.flip()
-
-    def run(self):
-        running = True
-        while running:
-            running = self.handle_events()
-            self.update()
-            self.draw()
-            self.clock.tick(60)  # 60FPS
-
-        pygame.quit()
-        sys.exit()
+    return jsonify(
+        {
+            "running": is_running,
+            "message": "ゲーム実行中" if is_running else "ゲーム停止中",
+        }
+    )
 
 
-# ゲームの実行
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    print("シューティングゲーム Webサーバーを起動中...")
+    print("ブラウザで http://localhost:5000 にアクセスしてください")
+
+    # デバッグモードでFlaskアプリを実行
+    app.run(debug=True, host="0.0.0.0", port=5000)

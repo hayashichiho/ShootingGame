@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shooting Game - シューティングゲーム</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="stars"></div>
+    <div class="main-container">
+        <div class="game-title">
+            <h1 class="title">SHOOTING GAME</h1>
+            <h2 class="subtitle">インベーダーゲーム</h2>
+        </div>
+
+        <div class="menu">
+            <button class="start-button" id="startBtn" onclick="startGame()">
+                <span>▶ ゲーム開始</span>
+            </button>
+            <button class="menu-button" onclick="showInstructions()">
+                <span>📖 遊び方</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- 説明モーダル -->
+    <div id="instructionsModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="hideInstructions()">&times;</span>
+            <h3>🎮 遊び方</h3>
+            <div class="instructions">
+                <ul>
+                    <li>🏃‍♂️ <strong>移動:</strong> 左右の矢印キーでプレイヤーを動かそう</li>
+                    <li>🔫 <strong>射撃:</strong> スペースキーで弾を発射</li>
+                    <li>👾 <strong>目標:</strong> すべての敵を倒してクリアを目指そう</li>
+                    <li>💥 <strong>注意:</strong> 敵の弾に当たったり、敵がプレイヤーまで到達するとゲームオーバー</li>
+                    <li>🔄 <strong>リスタート:</strong> ゲーム中にRキーを押すと再開できます</li>
+                </ul>
+            </div>
+            <button class="modal-button" onclick="hideInstructions()">閉じる</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/start.js') }}"></script>
+</body>
+
+</html>

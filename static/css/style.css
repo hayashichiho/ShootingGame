@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #0c0c2b, #1a1a3e, #2d2d5f);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 星空背景アニメーション */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background:
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, white, transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(1px 1px at 130px 80px, white, transparent),
+        radial-gradient(2px 2px at 160px 30px, white, transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: starMove 20s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes starMove {
+    0% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+}
+
+.game-title {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.title {
+    font-size: 4rem;
+    font-weight: bold;
+    text-shadow:
+        0 0 10px #00ff00,
+        0 0 20px #00ff00,
+        0 0 30px #00ff00;
+    letter-spacing: 8px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: #cccccc;
+    letter-spacing: 4px;
+    font-weight: normal;
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow:
+            0 0 10px #00ff00,
+            0 0 20px #00ff00,
+            0 0 30px #00ff00;
+    }
+
+    100% {
+        text-shadow:
+            0 0 20px #e8e823,
+            0 0 30px #e8e823,
+            0 0 40px #e8e823;
+    }
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.menu-button,
+.start-button {
+    background: linear-gradient(45deg, #1a1a3e, #2d2d5f);
+    border: 2px solid #00ff00;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    width: 300px;
+    border-radius: 5px;
+}
+
+.menu-button:hover,
+.start-button:hover {
+    background: linear-gradient(45deg, #2d2d5f, #3e3e7f);
+    box-shadow:
+        0 0 20px #00ff00,
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.start-button {
+    border-color: #ff6b6b;
+    animation: startButtonPulse 1.5s ease-in-out infinite;
+}
+
+.start-button:hover {
+    box-shadow:
+        0 0 20px #ff6b6b,
+        inset 0 0 20px rgba(255, 107, 107, 0.1);
+    border-color: #ff6b6b;
+}
+
+@keyframes startButtonPulse {
+    0% {
+        border-color: #ff6b6b;
+    }
+
+    50% {
+        border-color: #ff9999;
+    }
+
+    100% {
+        border-color: #ff6b6b;
+    }
+}
+
+
+.footer {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a3e, #2d2d5f);
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid #00ff00;
+    text-align: center;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ff6b6b;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ff4444;
+}
+
+.modal-content h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #00ff00;
+}
+
+.instructions {
+    text-align: left;
+    margin: 20px 0;
+}
+
+.instructions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instructions li {
+    margin: 15px 0;
+    font-size: 1.1rem;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    border-left: 4px solid #00ff00;
+}
+
+.modal-button {
+    background: #ff6b6b;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+    font-family: 'Courier New', monospace;
+}
+
+.modal-button:hover {
+    background: #ff5252;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+
+    .menu-button,
+    .start-button {
+        width: 250px;
+        font-size: 1rem;
+        padding: 12px 25px;
+    }
+
+    .modal-content {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .controls-info {
+        font-size: 0.9rem;
+    }
+}
+
+/* ローディングアニメーション */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, .3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
