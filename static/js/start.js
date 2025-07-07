@@ -3,42 +3,42 @@ let statusCheckInterval = null;
 let lastGameStatus = undefined;
 
 // ===== ゲーム制御関数 =====
-
 async function startGame() {
     // ゲーム開始
     const startBtn = document.getElementById('startBtn');
+    const buttonText = startBtn.querySelector('.button-text');
+    const loading = startBtn.querySelector('.loading');
 
     try {
         // ローディング表示
         startBtn.disabled = true;
+        buttonText.style.opacity = '0.7';
+        loading.classList.remove('hidden');
         addButtonClickEffect(startBtn);
 
         const response = await fetch('/start_game');
 
-        // レスポンス確認
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        // レスポンスデータの取得
         const data = await response.json();
         if (data.status === 'success') {
             console.log('ゲーム開始成功:', data);
+            buttonText.textContent = 'ゲーム起動中...';
+            loading.classList.add('hidden');
         } else {
             console.error('ゲーム開始失敗:', data);
         }
     } catch (error) {
         console.error('ゲーム開始エラー:', error);
-    } finally {
-        startBtn.disabled = false;
     }
 }
 
-// ゲーム停止
-async function stopGame() {
-
+async function endGame() {
+    // ゲーム終了
     try {
-        const response = await fetch('/stop_game');
+        const response = await fetch('/end_game');
 
         // レスポンス確認
         if (!response.ok) {
@@ -48,12 +48,12 @@ async function stopGame() {
         // レスポンスデータの取得
         const data = await response.json();
         if (data.status === 'success') {
-            console.log('ゲーム停止成功:', data);
+            console.log('ゲーム終了成功:', data);
         } else {
-            console.error('ゲーム停止失敗:', data);
+            console.error('ゲーム終了失敗:', data);
         }
     } catch (error) {
-        console.error('ゲーム停止エラー:', error);
+        console.error('ゲーム終了エラー:', error);
     }
 }
 
@@ -67,6 +67,8 @@ async function checkStatus() {
         console.error('状態確認エラー:', error);
     }
 }
+
+
 
 // ===== 共通のAPI呼び出し関数 =====
 async function fetchGameStatus() {
@@ -155,7 +157,36 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-// ===== 自動監視機能（オプション） =====
+// ===== ゲーム状態表示更新 =====
+function updateGameStatusDisplay(isRunning) {
+    console.log('UI状態更新:', isRunning);
+
+    const startBtn = document.getElementById('startBtn');
+    if (!startBtn) {
+        console.error('startBtnが見つかりません');
+        return;
+    }
+
+    const buttonText = startBtn.querySelector('.button-text');
+    if (!buttonText) {
+        console.error('.button-textが見つかりません');
+        return;
+    }
+
+    // boolean値で正しく判定
+    if (isRunning === true) {
+        startBtn.disabled = true;
+        buttonText.textContent = 'ゲーム実行中';
+        buttonText.style.opacity = '0.7';
+        console.log('ボタンを「ゲーム実行中」に変更しました');
+    } else {
+        startBtn.disabled = false;
+        buttonText.textContent = 'ゲーム開始';
+        buttonText.style.opacity = '1';
+        console.log('ボタンを「ゲーム開始」に変更しました');
+    }
+}
+// ===== 自動監視 =====
 function startStatusMonitoring() {
     // 定期的なゲーム状態監視を開始
     if (statusCheckInterval) return; // 既に開始されている場合は何もしない
@@ -168,14 +199,17 @@ function startStatusMonitoring() {
             if (lastGameStatus !== undefined && lastGameStatus !== data.running) {
                 const statusText = data.running ? 'ゲームが開始されました' : 'ゲームが終了しました';
                 console.log('状態変更検知:', statusText);
+
+                // UI状態を更新
+                updateGameStatusDisplay(data.running);
             }
             lastGameStatus = data.running;
 
         } catch (error) {
-            // エラーは無視（サイレント監視）
             console.debug('定期監視エラー:', error);
         }
-    }, 15000); // 15秒間隔
+    }, 3000); // 3秒間隔
+
     console.log('自動状態監視を開始しました');
 }
 
@@ -225,9 +259,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // キーボードショートカットの説明をコンソールに出力
     console.log('利用可能なキーボードショートカット:');
-    console.log('  Enter/Space: ゲーム開始');
-    console.log('  Escape: ゲーム停止/モーダル閉じる');
-    console.log('  Ctrl+S: 状態確認');
-    console.log('  Ctrl+Q: ゲーム停止');
-    console.log('  H/F1: 遊び方表示');
+    console.log('Escape: モーダル閉じる / ゲーム終了');
 });
