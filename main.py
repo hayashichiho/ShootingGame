@@ -27,7 +27,7 @@ def start_game():
             game_process.terminate()
 
         # 新しいゲームプロセスを開始
-        game_script = os.path.join(os.path.dirname(__file__), "sub.py")
+        game_script = os.path.join(os.path.dirname(__file__), "game/game.py")
         game_process = subprocess.Popen([sys.executable, game_script])
 
         return jsonify({"status": "success", "message": "ゲームが開始されました！"})

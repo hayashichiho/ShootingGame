@@ -92,9 +92,9 @@ class Bullet:
 
 
 # 画像の読み込み
-enemy1_img = pygame.image.load("enemy1.png")
+enemy1_img = pygame.image.load("game/images/enemy1.png")
 enemy1_img = pygame.transform.scale(enemy1_img, (40, 30))
-enemy2_img = pygame.image.load("enemy2.png")
+enemy2_img = pygame.image.load("game/images/enemy2.png")
 enemy2_img = pygame.transform.scale(enemy2_img, (40, 30))
 
 
