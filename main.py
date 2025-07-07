@@ -38,9 +38,9 @@ def start_game():
         )
 
 
-@app.route("/stop_game")
-def stop_game():
-    """ゲームを停止"""
+@app.route("/end_game")
+def end_game():
+    """ゲームを終了"""
     global game_process
 
     try:
@@ -49,11 +49,11 @@ def stop_game():
             game_process.terminate()
             game_process.wait()
 
-        return jsonify({"status": "success", "message": "ゲームが停止されました"})
+        return jsonify({"status": "success", "message": "ゲームが終了しました"})
 
     except Exception as e:
         return jsonify(
-            {"status": "error", "message": f"ゲームの停止に失敗しました: {str(e)}"}
+            {"status": "error", "message": f"ゲームの終了に失敗しました: {str(e)}"}
         )
 
 
