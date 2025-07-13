@@ -18,6 +18,13 @@ except pygame.error:
     enemy2_img = pygame.Surface((40, 30))
     enemy2_img.fill(ORANGE)
 
+try:
+    enemy3_img = pygame.image.load("game/images/enemy3.png")
+    enemy3_img = pygame.transform.scale(enemy3_img, (45, 35))
+except pygame.error:
+    enemy3_img = pygame.Surface((45, 30))
+    enemy3_img.fill(LIGHTBLUE)
+
 
 class Enemy:
     def __init__(self, x, y, type_id):
@@ -32,6 +39,11 @@ class Enemy:
         self.direction = 1
         self.shoot_timer = random.randint(90, 180)
 
+        if self.type_id == 2:
+            self.hp = 3
+        else:
+            self.hp = 1
+
     def update(self):
         self.y += self.speed_y
         if self.type_id == 1:
@@ -39,6 +51,11 @@ class Enemy:
             if self.x <= 0 or self.x >= SCREEN_WIDTH - self.width:
                 self.direction *= -1
         self.shoot_timer -= 1
+
+    def take_damage(self):
+        self.hp -= 1
+        if self.hp <= 0:
+            self.alive = False
 
     def should_shoot(self):
         return self.shoot_timer <= 0
@@ -48,7 +65,9 @@ class Enemy:
 
     def draw(self, screen):
         if self.alive:
-            if self.type_id == 0:
-                screen.blit(enemy1_img, (self.x, self.y))
-            else:
-                screen.blit(enemy2_img, (self.x, self.y))
+          if self.type_id == 0:
+             screen.blit(enemy1_img, (self.x, self.y))
+          elif self.type_id == 1:
+             screen.blit(enemy2_img, (self.x, self.y))
+          elif self.type_id == 2:
+             screen.blit(enemy3_img, (self.x, self.y))

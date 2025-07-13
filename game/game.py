@@ -10,6 +10,7 @@ from config import (
     SCREEN_WIDTH,
     WHITE,
     YELLOW,
+    LIGHTBLUE,
 )
 from enemy import Enemy
 from item import Item
@@ -52,7 +53,7 @@ class Game:
         self.score_multiplier_timer = 0
 
         for _ in range(3):
-            type_id = random.choice([0, 1])
+            type_id = random.choice([0, 1, 2])
             x = random.randint(0, SCREEN_WIDTH - 40)
             enemy = Enemy(x, -random.randint(50, 300), type_id)
             self.enemies.append(enemy)
