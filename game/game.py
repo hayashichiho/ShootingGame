@@ -132,7 +132,7 @@ class Enemy:
 
 # ハート画像の読み込み
 try:
-    heart_img = pygame.image.load("game/images/heart.png")
+    heart_img = pygame.image.load("game/image/heart.png")
     heart_img = pygame.transform.scale(heart_img, (30, 30))
 except pygame.error:
     heart_img = pygame.Surface((30, 30))
