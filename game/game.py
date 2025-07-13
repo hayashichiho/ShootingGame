@@ -257,7 +257,7 @@ class Game:
 
         self.spawn_timer += 1
         if self.spawn_timer >= self.current_spawn_interval:
-            type_id = random.choice([0, 1])
+            type_id = random.choice([0, 1, 2])
             x = random.randint(0, SCREEN_WIDTH - 40)
             enemy = Enemy(x, -30, type_id)
             self.enemies.append(enemy)
@@ -304,7 +304,7 @@ class Game:
             self.spawn_interval_decrease_threshold += 500
 
         while self.score >= self.next_enemy_add_score:
-            type_id = random.choice([0, 1])
+            type_id = random.choice([0, 1, 2])
             x = random.randint(0, SCREEN_WIDTH - 40)
             enemy = Enemy(x, -random.randint(50, 200), type_id) 
             self.enemies.append(enemy)

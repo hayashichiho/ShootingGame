@@ -1,7 +1,11 @@
 import random
 
 import pygame
+<<<<<<< HEAD
 from config import ORANGE, RED, SCREEN_WIDTH, LIGHTBLUE
+=======
+from config import ORANGE, RED, LIGHTBLUE, SCREEN_WIDTH
+>>>>>>> 1d51fce5dd689b952132aebf4db1f19c48e204bb
 
 # 画像の読み込み
 try:
