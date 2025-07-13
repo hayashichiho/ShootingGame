@@ -1,6 +1,5 @@
 import random
 import sys
-
 import pygame
 import requests
 from bullet import Bullet
