@@ -2,21 +2,42 @@
 let statusCheckInterval = null;
 let lastGameStatus = undefined;
 
+// ===== 名前入力処理 =====
+function onNameEntered() {
+    const name = document.getElementById('playerNameInput').value.trim();
+    if (!name) {
+        alert('名前を入力してください');
+        return;
+    }
+    localStorage.setItem('playerName', name);
+
+    // 名前入力欄を非表示
+    document.getElementById('name-input-area').style.display = 'none';
+    // メニューを表示
+    document.getElementById('game-menu').style.display = '';
+
+    // 現在の名前を表示エリアも更新
+    const currentNameElem = document.getElementById('currentPlayerName');
+    if (currentNameElem) {
+        currentNameElem.textContent = name;
+    }
+}
+
+
 // ===== ゲーム制御関数 =====
 async function startGame() {
-    // ゲーム開始
+    const playerName = localStorage.getItem('playerName') || "Player1";
     const startBtn = document.getElementById('startBtn');
     const buttonText = startBtn.querySelector('.button-text');
     const loading = startBtn.querySelector('.loading');
 
     try {
-        // ローディング表示
         startBtn.disabled = true;
         buttonText.style.opacity = '0.7';
         loading.classList.remove('hidden');
-        addButtonClickEffect(startBtn);
 
-        const response = await fetch('/start_game');
+        // player_nameをクエリパラメータで渡す
+        const response = await fetch(`/start_game?player_name=${encodeURIComponent(playerName)}`);
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -24,7 +45,6 @@ async function startGame() {
 
         const data = await response.json();
         if (data.status === 'success') {
-            console.log('ゲーム開始成功:', data);
             buttonText.textContent = 'ゲーム起動中...';
             loading.classList.add('hidden');
         } else {
@@ -238,6 +258,28 @@ window.addEventListener('offline', function () {
 
 // ===== 初期化処理 =====
 document.addEventListener('DOMContentLoaded', function () {
+    const name = localStorage.getItem('playerName');
+    if (!name) {
+        // 名前未入力なら名前入力欄を表示、メニューを非表示
+        document.getElementById('name-input-area').style.display = '';
+        document.getElementById('game-menu').style.display = 'none';
+    } else {
+        document.getElementById('name-input-area').style.display = 'none';
+        document.getElementById('game-menu').style.display = '';
+        // 現在の名前を表示
+        document.getElementById('currentPlayerName').textContent = name;
+    }
+
+    // 名前変更ボタンのイベント
+    const changeNameBtn = document.getElementById('changeNameBtn');
+    if (changeNameBtn) {
+        changeNameBtn.addEventListener('click', function () {
+            // 名前入力欄を表示、メニューを非表示、入力欄に現在の名前をセット
+            document.getElementById('name-input-area').style.display = '';
+            document.getElementById('game-menu').style.display = 'none';
+            document.getElementById('playerNameInput').value = localStorage.getItem('playerName') || '';
+        });
+    }
     // ページ読み込み完了時の初期化
     console.log('🎮 Shooting Game Web Interface 読み込み完了');
 

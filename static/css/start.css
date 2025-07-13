@@ -50,6 +50,35 @@ body {
     opacity: 0.5;
 }
 
+
+.name-input-area {
+    display: flex;
+    align-items: center;
+    /* ← これで上下中央揃え */
+    gap: 10px;
+    /* ← 入力欄とボタンの間隔 */
+    justify-content: center;
+    /* ← 横中央揃え（必要なら） */
+    margin-bottom: 20px;
+}
+
+.name-input {
+    width: 320px;
+    font-size: 1.1em;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.name-input:focus {
+    border-color: #4fc3f7;
+}
+
+
+
 /* ===== メインコンテンツ ===== */
 .main-container {
     display: flex;
@@ -119,6 +148,8 @@ body {
     border-color: #ff6b6b;
     animation: startButtonPulse 1.5s ease-in-out infinite;
 }
+
+
 
 /* ホバー効果 */
 .btn--menu:hover {
@@ -243,6 +274,14 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+#changeNameBtnBottom {
+    position: fixed;
+    left: 50%;
+    bottom: 5px;
+    transform: translateX(-50%);
+    z-index: 200;
 }
 
 /* ===== アニメーション ===== */
