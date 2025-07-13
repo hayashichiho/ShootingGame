@@ -42,6 +42,6 @@ class Bullet:
                     # ここではaliveを変更しない
                     pass 
                 elif isinstance(target, Enemy):
-                    target.alive = False # 敵に当たったらaliveをFalseにする
+                    target.take_damage()
                 return True
         return False
