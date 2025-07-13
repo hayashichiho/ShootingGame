@@ -370,14 +370,14 @@ class Game:
             x = random.randint(0, SCREEN_WIDTH - 40)
             enemy = Enemy(x, -random.randint(50, 200), type_id)
             self.enemies.append(enemy)
-            self.next_enemy_add_score += 200
+            self.next_enemy_add_score += 300
             print(f"スコア {self.score} で新しい敵を追加。現在の敵数: {len(self.enemies)}")
 
         while self.score >= self.next_speed_increase_score:
             for enemy in self.enemies:
-                enemy.speed_y *= 1.15
-                enemy.speed_x *= 1.15
-            self.next_speed_increase_score += 500
+                enemy.speed_y *= 1.02
+                enemy.speed_x *= 1.02
+            self.next_speed_increase_score += 1000
             print(f"スコア {self.score} で敵の速度が上昇。")
 
         self.enemies = [enemy for enemy in self.enemies if enemy.alive and enemy.y < SCREEN_HEIGHT]
