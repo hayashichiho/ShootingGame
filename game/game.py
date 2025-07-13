@@ -48,7 +48,7 @@ class Player:
 
     def draw_life(self, screen):
         for i in range(self.life):
-            screen.blit(heart_img, (10 + i * 35, 30)) # Y座標を20から30に変更
+            screen.blit(heart_img, (10 + i * 35, 5))
 
 # 弾クラス
 class Bullet:
@@ -349,7 +349,7 @@ class Game:
                 if bullet.speed_y == -7: 
                     for enemy in self.enemies:
                         if bullet.check_collision(enemy): 
-                            self.score += 100 
+                            self.score += 50 
                             break 
 
         for item in self.items[:]:
@@ -467,7 +467,9 @@ class Game:
             score_rect_game_over = score_surface_game_over.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60)) 
             screen.blit(score_surface_game_over, score_rect_game_over)
         else:
-            screen.blit(score_surface, (10, 10))
+            score_rect = score_surface.get_rect(topright=(SCREEN_WIDTH - 10, 10))
+            screen.blit(score_surface, score_rect)
+
 
         pygame.display.flip()
 
