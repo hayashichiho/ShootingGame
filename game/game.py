@@ -328,6 +328,8 @@ class Game:
 
         self.player.draw(screen)
 
+        self.player.draw_life(screen)
+
         for enemy in self.enemies:
             enemy.draw(screen)
         for bullet in self.player_bullets + self.enemy_bullets:
