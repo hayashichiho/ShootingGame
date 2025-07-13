@@ -1,0 +1,232 @@
+/* ===== ランキング専用スタイル ===== */
+.ranking-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.ranking-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ===== タブスタイル ===== */
+.ranking-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    background: linear-gradient(45deg, #1a1a3e, #2d2d5f);
+    border: 2px solid #555;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    border-color: #00ff00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.tab-button.active {
+    border-color: #ff6b6b;
+    background: linear-gradient(45deg, #ff6b6b, #ff8888);
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+/* ===== ランキング表示 ===== */
+.ranking-display {
+    background: linear-gradient(135deg, #1a1a3e, #2d2d5f);
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.ranking-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.ranking-item:hover {
+    background: rgba(0, 255, 0, 0.1);
+    transform: translateX(5px);
+}
+
+/* 順位別の色分け */
+.ranking-item.rank-1 {
+    border-left-color: #ffd700;
+    /* 金 */
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(0, 0, 0, 0.3));
+}
+
+.ranking-item.rank-2 {
+    border-left-color: #c0c0c0;
+    /* 銀 */
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.2), rgba(0, 0, 0, 0.3));
+}
+
+.ranking-item.rank-3 {
+    border-left-color: #cd7f32;
+    /* 銅 */
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.2), rgba(0, 0, 0, 0.3));
+}
+
+.rank-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.rank-1 .rank-number {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.rank-2 .rank-number {
+    color: #c0c0c0;
+    text-shadow: 0 0 10px #c0c0c0;
+}
+
+.rank-3 .rank-number {
+    color: #cd7f32;
+    text-shadow: 0 0 10px #cd7f32;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.player-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #00ff00;
+}
+
+.play-date {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.score-info {
+    text-align: right;
+}
+
+.score-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ff6b6b;
+    text-shadow: 0 0 10px #ff6b6b;
+}
+
+.score-unit {
+    font-size: 1rem;
+    color: #ccc;
+}
+
+/* ===== 自分のベストスコア ===== */
+.my-best-score {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.my-best-score h3 {
+    color: #00ff00;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.user-score-card {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 20px;
+    background: linear-gradient(135deg, #2d2d5f, #1a1a3e);
+    border: 2px solid #ff6b6b;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+}
+
+.user-score-card .score-value {
+    font-size: 2rem;
+    color: #ff6b6b;
+    text-shadow: 0 0 15px #ff6b6b;
+}
+
+.user-score-card .score-date {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+/* ===== ローディング ===== */
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 40px;
+    color: #aaa;
+    font-size: 1.1rem;
+}
+
+.no-data-message {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: 1.1rem;
+}
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 768px) {
+    .ranking-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab-button {
+        width: 200px;
+    }
+
+    .ranking-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .rank-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .score-info {
+        text-align: center;
+    }
+}

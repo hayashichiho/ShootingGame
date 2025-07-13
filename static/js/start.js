@@ -261,3 +261,9 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('利用可能なキーボードショートカット:');
     console.log('Escape: モーダル閉じる / ゲーム終了');
 });
+
+// ===== ランキング表示 =====
+function showRanking() {
+    console.log('ランキングページに移動');
+    window.location.href = '/ranking';
+}

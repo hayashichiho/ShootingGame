@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shooting Game - シューティングゲーム</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/start.css') }}">
 </head>
 
 <body>
@@ -16,6 +16,7 @@
             <h2 class="subtitle">インベーダーゲーム</h2>
         </div>
 
+        <!-- start.html の menu セクションを更新 -->
         <div class="menu">
             <button id="startBtn" class="btn btn--start" onclick="startGame()">
                 <span class="button-text">ゲーム開始</span>
@@ -24,8 +25,10 @@
             <button class="btn btn--menu" onclick="showInstructions()">
                 <span>📖 遊び方</span>
             </button>
+            <button class="btn btn--menu" onclick="showRanking()">
+                <span>🏆 ランキング</span>
+            </button>
         </div>
-
     </div>
 
     <!-- 説明モーダル -->

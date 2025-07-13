@@ -1,8 +1,9 @@
 import os
+import sqlite3
 import subprocess
 import sys
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
@@ -10,12 +11,150 @@ app = Flask(__name__)
 game_process = None
 
 
+# ===== データベース関連 =====
+def init_database():
+    """データベースの初期化"""
+    conn = sqlite3.connect("game_scores.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS game_scores (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            player_name TEXT NOT NULL,
+            score INTEGER NOT NULL,
+            play_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+# ===== 既存のルート =====
 @app.route("/")
 def index():
     """スタート画面を表示"""
     return render_template("start.html")
 
 
+@app.route("/ranking")
+def ranking():
+    """ランキング画面を表示"""
+    return render_template("ranking.html")
+
+
+# ===== 新しいAPIルート =====
+@app.route("/api/ranking")
+def api_ranking():
+    """ランキングデータを取得"""
+    period = request.args.get("period", "all-time")
+
+    try:
+        conn = sqlite3.connect("game_scores.db")
+        cursor = conn.cursor()
+
+        # 期間に応じたクエリ
+        if period == "today":
+            cursor.execute("""
+                SELECT player_name, score, play_date
+                FROM game_scores
+                WHERE DATE(play_date) = DATE('now', 'localtime')
+                ORDER BY score DESC
+                LIMIT 20
+            """)
+        elif period == "this-week":
+            cursor.execute("""
+                SELECT player_name, score, play_date
+                FROM game_scores
+                WHERE DATE(play_date) >= DATE('now', 'localtime', '-7 days')
+                ORDER BY score DESC
+                LIMIT 20
+            """)
+        else:  # all-time
+            cursor.execute("""
+                SELECT player_name, score, play_date
+                FROM game_scores
+                ORDER BY score DESC
+                LIMIT 20
+            """)
+
+        ranking_data = []
+        for row in cursor.fetchall():
+            ranking_data.append(
+                {"player_name": row[0], "score": row[1], "play_date": row[2]}
+            )
+
+        conn.close()
+
+        return jsonify({"success": True, "ranking": ranking_data})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"ランキング取得エラー: {str(e)}"})
+
+
+@app.route("/api/user-best-score")
+def api_user_best_score():
+    """ユーザーのベストスコアを取得（今は全体のトップスコア）"""
+    try:
+        conn = sqlite3.connect("game_scores.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT player_name, score, play_date
+            FROM game_scores
+            ORDER BY score DESC
+            LIMIT 1
+        """)
+
+        result = cursor.fetchone()
+        conn.close()
+
+        if result:
+            return jsonify(
+                {
+                    "success": True,
+                    "best_score": {
+                        "player_name": result[0],
+                        "score": result[1],
+                        "play_date": result[2],
+                    },
+                }
+            )
+        else:
+            return jsonify({"success": True, "best_score": None})
+
+    except Exception as e:
+        return jsonify(
+            {"success": False, "message": f"ベストスコア取得エラー: {str(e)}"}
+        )
+
+
+@app.route("/api/save-score", methods=["POST"])
+def api_save_score():
+    """スコアを保存"""
+    try:
+        data = request.get_json()
+        player_name = data.get("player_name", "Anonymous")
+        score = data.get("score", 0)
+
+        conn = sqlite3.connect("game_scores.db")
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "INSERT INTO game_scores (player_name, score) VALUES (?, ?)",
+            (player_name, score),
+        )
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"success": True, "message": "スコアが保存されました"})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"スコア保存エラー: {str(e)}"})
+
+
+# ===== 既存のゲーム制御ルート =====
 @app.route("/start_game")
 def start_game():
     """シューティングゲームを開始"""
@@ -75,6 +214,9 @@ def game_status():
 if __name__ == "__main__":
     print("シューティングゲーム Webサーバーを起動中...")
     print("ブラウザで http://localhost:5000 にアクセスしてください")
+
+    # データベース初期化
+    init_database()
 
     # デバッグモードでFlaskアプリを実行
     app.run(debug=True, host="0.0.0.0", port=5000)
