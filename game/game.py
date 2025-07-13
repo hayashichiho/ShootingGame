@@ -164,7 +164,6 @@ class Enemy:
             else:
                 screen.blit(enemy2_img, (self.x, self.y))
 
-<<<<<<< HEAD
 # アイテムクラス
 class Item:
     def __init__(self, x, y, item_type="shot_up"):
@@ -227,15 +226,6 @@ class SubPlayer:
         pygame.draw.rect(screen, YELLOW_GREEN, (self.x, self.y + 10, self.width, 10))
         pygame.draw.rect(screen, YELLOW_GREEN, (self.x + self.width // 2 - 5, self.y, 10, 10))
 
-=======
-# ハート画像の読み込み
-try:
-    heart_img = pygame.image.load("game/images/heart.png")
-    heart_img = pygame.transform.scale(heart_img, (30, 30))
-except pygame.error:
-    heart_img = pygame.Surface((30, 30))
-    heart_img.fill(RED)
->>>>>>> 9d779ca60f105a88d04f26c15586f95a8a4d5f2b
 
 # ゲームのメインクラス
 class Game:
@@ -477,8 +467,7 @@ class Game:
             score_rect_game_over = score_surface_game_over.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60)) 
             screen.blit(score_surface_game_over, score_rect_game_over)
         else:
-            score_rect = score_surface.get_rect(topright=(SCREEN_WIDTH - 10, 10))
-            screen.blit(score_surface, score_rect)
+            screen.blit(score_surface, (10, 10))
 
         pygame.display.flip()
 
