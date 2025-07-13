@@ -4,7 +4,7 @@ import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 app = Flask(__name__)
 
@@ -214,6 +214,15 @@ def game_status():
             "running": is_running,
             "message": "ゲーム実行中" if is_running else "ゲーム停止中",
         }
+    )
+
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon",
     )
 
 
