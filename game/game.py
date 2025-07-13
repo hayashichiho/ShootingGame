@@ -132,7 +132,7 @@ class Enemy:
 
 # ハート画像の読み込み
 try:
-    heart_img = pygame.image.load("game/image/heart.png")
+    heart_img = pygame.image.load("game/images/heart.png")
     heart_img = pygame.transform.scale(heart_img, (30, 30))
 except pygame.error:
     heart_img = pygame.Surface((30, 30))
@@ -298,7 +298,8 @@ class Game:
             score_rect_game_over = score_surface_game_over.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60)) 
             screen.blit(score_surface_game_over, score_rect_game_over)
         else:
-            screen.blit(score_surface, (10, 10))
+            score_rect = score_surface.get_rect(topright=(SCREEN_WIDTH - 10, 10))
+            screen.blit(score_surface, score_rect)
 
         pygame.display.flip()
 
