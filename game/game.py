@@ -549,6 +549,7 @@ class Game:
                 self.draw()
             else:
                 self.draw()
+                self.save_score_to_server()
                 pygame.time.wait(3000)
                 running = False
 
