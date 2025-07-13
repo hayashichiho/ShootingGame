@@ -1,11 +1,14 @@
 import pygame
-from bullet import Bullet
-from config import WHITE, YELLOW_GREEN
+
+from game.actors.bullet import Bullet
+from game.utils.config import WHITE, YELLOW_GREEN
 
 
-# サブ機体クラス
 class SubPlayer:
+    """サブプレイヤークラス"""
+
     def __init__(self, player_ref, side_offset):
+        """初期化関数"""
         self.player_ref = player_ref
         self.width = 30
         self.height = 20
@@ -16,6 +19,7 @@ class SubPlayer:
         self.alive = True
 
     def update(self):
+        """サブプレイヤーを更新する関数"""
         self.x = (
             self.player_ref.x
             + (self.player_ref.width // 2)
@@ -26,6 +30,8 @@ class SubPlayer:
 
         self.shoot_timer -= 1
         bullets_fired = []
+
+        # サブプレイヤーが弾を撃つかどうかを判断
         if self.shoot_timer <= 0:
             self.shoot_timer = self.shoot_interval
             bullets_fired.append(
@@ -34,6 +40,7 @@ class SubPlayer:
         return bullets_fired
 
     def draw(self, screen):
+        """サブプレイヤーを画面に描画する関数"""
         pygame.draw.rect(screen, YELLOW_GREEN, (self.x, self.y + 10, self.width, 10))
         pygame.draw.rect(
             screen, YELLOW_GREEN, (self.x + self.width // 2 - 5, self.y, 10, 10)

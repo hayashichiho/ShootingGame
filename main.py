@@ -172,8 +172,9 @@ def start_game():
 
         # 新しいゲームプロセスを開始
         player_name = request.args.get("player_name", "Player1")
-        game_script = os.path.join(os.path.dirname(__file__), "game/game.py")
-        game_process = subprocess.Popen([sys.executable, game_script, player_name])
+        game_process = subprocess.Popen(
+            [sys.executable, "-m", "game.core.game", player_name]
+        )
 
         return jsonify({"status": "success", "message": "ゲームが開始されました！"})
 

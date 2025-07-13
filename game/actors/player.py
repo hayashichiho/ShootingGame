@@ -1,13 +1,15 @@
 import random
 
 import pygame
-from config import ORANGE, RED, SCREEN_HEIGHT, SCREEN_WIDTH, YELLOW_GREEN
-from images import heart_img
+
+from game.utils.config import ORANGE, RED, SCREEN_HEIGHT, SCREEN_WIDTH, YELLOW_GREEN
 
 
-# プレイヤークラス
 class Player:
-    def __init__(self):
+    """プレイヤークラス"""
+
+    def __init__(self, images=None):
+        """初期化関数"""
         self.x = SCREEN_WIDTH // 2
         self.y = SCREEN_HEIGHT - 50
         self.width = 40
@@ -16,6 +18,7 @@ class Player:
         self.life = 3
         self.alive = True
         self.shot_count = 1
+        self.images = images
         self.hit_timer = 0  # ヒット後の無敵時間タイマー
         self.invincible_duration = 60  # 無敵時間の長さ
         self.color = YELLOW_GREEN  # デフォルト色
@@ -23,18 +26,22 @@ class Player:
             self.color = ORANGE
 
     def move_left(self):
+        """左に移動する関数"""
         if self.x > 0:
             self.x -= self.speed
 
     def move_right(self):
+        """右に移動する関数"""
         if self.x < SCREEN_WIDTH - self.width:
             self.x += self.speed
 
-    def update(self):  # プレイヤーの更新メソッドを追加
+    def update(self):
+        """プレイヤーを更新する関数"""
         if self.hit_timer > 0:
             self.hit_timer -= 1
 
     def draw(self, screen):
+        """プレイヤーを画面に描画する関数"""
         if self.alive:
             draw_color = self.color
             if self.hit_timer > 0:  # 無敵時間中なら点滅させる
@@ -52,5 +59,6 @@ class Player:
             )
 
     def draw_life(self, screen):
+        """残りライフを画面に描画する関数"""
         for i in range(self.life):
-            screen.blit(heart_img, (10 + i * 35, 5))
+            screen.blit(self.images["heart"], (10 + i * 35, 5))
