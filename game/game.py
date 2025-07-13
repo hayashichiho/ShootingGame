@@ -375,8 +375,8 @@ class Game:
 
         while self.score >= self.next_speed_increase_score:
             for enemy in self.enemies:
-                enemy.speed_y *= 1.05
-                enemy.speed_x *= 1.05
+                enemy.speed_y *= 1.02
+                enemy.speed_x *= 1.02
             self.next_speed_increase_score += 500
             print(f"スコア {self.score} で敵の速度が上昇。")
 
