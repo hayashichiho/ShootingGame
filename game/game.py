@@ -22,7 +22,7 @@ pygame.init()
 
 # 画面設定
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("インベーダーゲーム")
+pygame.display.set_caption("SHOOTING GAME")
 
 
 # ゲームのメインクラス
