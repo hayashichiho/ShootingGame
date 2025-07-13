@@ -26,6 +26,7 @@ class Player:
         self.width = 40
         self.height = 30
         self.speed = 5
+        self.life = 2
         self.alive = True
         
     def move_left(self):
@@ -42,6 +43,10 @@ class Player:
             pygame.draw.rect(screen, YELLOW_GREEN, (self.x + self.width // 2 - 5, self.y, 10, 10))
             pygame.draw.rect(screen, YELLOW_GREEN, (self.x + 5, self.y + 20, 5, 10))
             pygame.draw.rect(screen, YELLOW_GREEN, (self.x + self.width - 10, self.y + 20, 5, 10))
+
+    def draw_life(self, screen):
+        for i in range(self.life):
+            screen.blit(heart_img, (10 + i * 35, 10))
 
 # 弾クラス
 class Bullet:
@@ -70,9 +75,7 @@ class Bullet:
                 self.y < target.y + target.height and
                 self.y + self.height > target.y):
                 self.active = False
-                if isinstance(target, Player):
-                    target.alive = False
-                elif isinstance(target, Enemy):
+                if isinstance(target, Enemy):
                     target.alive = False
                 return True
         return False
@@ -126,6 +129,14 @@ class Enemy:
                 screen.blit(enemy1_img, (self.x, self.y))
             else:
                 screen.blit(enemy2_img, (self.x, self.y))
+
+# ハート画像の読み込み
+try:
+    heart_img = pygame.image.load("game/images/heart.png")
+    heart_img = pygame.transform.scale(heart_img, (30, 30))
+except pygame.error:
+    heart_img = pygame.Surface((30, 30))
+    heart_img.fill(RED)
 
 # ゲームのメインクラス
 class Game:
@@ -190,9 +201,16 @@ class Game:
             if not bullet.active:
                 self.enemy_bullets.remove(bullet)
             elif bullet.check_collision(self.player):
-                print("プレイヤーに命中！ゲームオーバー！")
-                self.game_over = True
-                break
+               self.player.life -= 1
+               print(f"弾がプレイヤーに命中！残りライフ：{self.player.life}")
+               self.enemy_bullets.remove(bullet)
+
+               if self.player.life <= 0:
+                if not self.game_over:
+                   self.player.alive = False
+                   self.game_over = True
+                   print("ゲームオーバー")
+                   break
 
         for enemy in self.enemies:
             if enemy.alive:
@@ -201,10 +219,19 @@ class Game:
                     enemy.x + enemy.width > self.player.x and
                     enemy.y < self.player.y + self.player.height and
                     enemy.y + enemy.height > self.player.y):
-                    self.player.alive = False
-                    self.game_over = True
-                    print("敵がプレイヤーに接触！ゲームオーバー！")
-                    break
+                   
+                    self.player.life -= 1
+                    print(f"敵がプレイヤーに接触！残りライフ：{self.player.life}")
+                    enemy.alive = False
+
+                if self.player.life <= 0:
+                 if not self.game_over:
+                   self.player.alive = False
+                   self.game_over = True
+                   print("ゲームオーバー")
+
+                   enemy.alive = False
+                   break
 
                 if enemy.should_shoot():
                     bullet = Bullet(enemy.x + enemy.width // 2, enemy.y + enemy.height, 4, YELLOW)
@@ -247,11 +274,14 @@ class Game:
         screen.fill(BLACK)
 
         self.player.draw(screen)
+        
+        self.player.draw_life(screen)
 
         for enemy in self.enemies:
             enemy.draw(screen)
         for bullet in self.player_bullets + self.enemy_bullets:
             bullet.draw(screen)
+
 
         score_font = pygame.font.Font(None, 36)
         score_text = f"SCORE: {self.score}"
