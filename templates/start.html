@@ -16,8 +16,21 @@
             <h2 class="subtitle">インベーダーゲーム</h2>
         </div>
 
-        <!-- start.html の menu セクションを更新 -->
-        <div class="menu">
+        <!-- 名前入力フォーム -->
+        <div id="name-input-area" class="menu name-input-area">
+            <input type="text" id="playerNameInput" class="name-input" placeholder="名前を入力" maxlength="12">
+            <button class="btn btn--start" onclick="onNameEntered()">
+                <span class="button-text">決定</span>
+            </button>
+        </div>
+
+        <!-- メニュー -->
+        <div id="game-menu" class="menu" style="display:none;">
+            <div id="current-name-area" style="margin-bottom: 12px;">
+                <span>現在の名前: <strong id="currentPlayerName"></strong></span>
+                <button class="btn btn--name" id="changeNameBtn"
+                    style="margin: 24px auto 24px auto; display: block;">名前変更</button>
+            </div>
             <button id="startBtn" class="btn btn--start" onclick="startGame()">
                 <span class="button-text">ゲーム開始</span>
                 <span class="loading hidden"></span>

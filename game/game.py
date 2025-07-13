@@ -1,5 +1,6 @@
 import random
 import sys
+
 import pygame
 import requests
 from bullet import Bullet
@@ -40,7 +41,6 @@ class Game:
         self.score = 0
         self.spawn_timer = 0
         self.game_over = False
-        self.player_name = "Player1"
 
         self.next_enemy_add_score = 200
         self.next_speed_increase_score = 1000
@@ -56,6 +56,11 @@ class Game:
             x = random.randint(0, SCREEN_WIDTH - 40)
             enemy = Enemy(x, -random.randint(50, 300), type_id)
             self.enemies.append(enemy)
+
+        if len(sys.argv) > 1:
+            self.player_name = sys.argv[1]
+        else:
+            self.player_name = "Player1"
 
     def handle_events(self):
         for event in pygame.event.get():
