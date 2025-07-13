@@ -27,7 +27,7 @@ class Player:
         self.width = 40
         self.height = 30
         self.speed = 5
-        self.life = 2
+        self.life = 3
         self.alive = True
         self.shot_count = 1 
         
