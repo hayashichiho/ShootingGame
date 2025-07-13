@@ -1,4 +1,6 @@
 import pygame
+from player import Player
+from enemy import Enemy
 from config import SCREEN_HEIGHT, SCREEN_WIDTH
 from enemy import Enemy
 
@@ -35,8 +37,13 @@ class Bullet:
                 and self.y + self.height > target.y
             ):
                 self.active = False
+<<<<<<< HEAD:game/bullet.py
+                if isinstance(target, Player):
+                    target.alive = False
+=======
                 if isinstance(target, Enemy):
                     target.alive = False
 
+>>>>>>> f05705fc81e46f00c2e2a576b38adc0072b60aa5:game/game_bullet.py
                 return True
         return False
