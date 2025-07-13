@@ -2,7 +2,7 @@ import random
 import sys
 import pygame
 import requests
-from bullets import Bullet
+from game.game_bullet import Bullet
 from config import (
     BLACK,
     RED,

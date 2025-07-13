@@ -1,6 +1,6 @@
 import pygame
 from config import SCREEN_HEIGHT, SCREEN_WIDTH
-from game.enemy import Enemy
+from enemy import Enemy
 
 
 class Bullet:
