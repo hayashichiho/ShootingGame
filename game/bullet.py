@@ -1,8 +1,7 @@
 import pygame
-from player import Player
-from enemy import Enemy
-from config import SCREEN_HEIGHT, SCREEN_WIDTH
-from enemy import Enemy
+from player import Player # Playerクラスのインポート
+from enemy import Enemy   # Enemyクラスのインポート
+from config import SCREEN_HEIGHT, SCREEN_WIDTH # SCREEN_WIDTH, SCREEN_HEIGHTのインポート
 
 
 class Bullet:
@@ -37,13 +36,12 @@ class Bullet:
                 and self.y + self.height > target.y
             ):
                 self.active = False
-<<<<<<< HEAD:game/bullet.py
+                # マージの競合を解決し、PlayerとEnemyの両方に対応
                 if isinstance(target, Player):
-                    target.alive = False
-=======
-                if isinstance(target, Enemy):
-                    target.alive = False
-
->>>>>>> f05705fc81e46f00c2e2a576b38adc0072b60aa5:game/game_bullet.py
+                    # プレイヤーはGameクラスでライフが管理されるため、
+                    # ここではaliveを変更しない
+                    pass 
+                elif isinstance(target, Enemy):
+                    target.alive = False # 敵に当たったらaliveをFalseにする
                 return True
         return False
