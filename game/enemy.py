@@ -20,10 +20,10 @@ except pygame.error:
     enemy2_img.fill(ORANGE)
 
 try:
-    enemy3_img = pygame.image.load("game/images/enemy2.png")
+    enemy3_img = pygame.image.load("game/images/enemy3.png")
     enemy3_img = pygame.transform.scale(enemy3_img, (45, 35))
 except pygame.error:
-    enemy3_img = pygame.Surface((45, 30))
+    enemy3_img = pygame.Surface((45, 35))
     enemy3_img.fill(LIGHTBLUE)
 
 
