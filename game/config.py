@@ -1,0 +1,12 @@
+# 画面サイズ
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# 色の定義
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+ORANGE = (255, 165, 0)
+YELLOW_GREEN = (154, 205, 50)
+WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+BLUE = (0, 0, 255)

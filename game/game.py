@@ -3,260 +3,26 @@ import sys
 
 import pygame
 import requests
+from bullet import Bullet
+from config import (
+    BLACK,
+    RED,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+    WHITE,
+    YELLOW,
+)
+from enemy import Enemy
+from item import Item
+from player import Player
+from subPlayer import SubPlayer
 
+# Pygameの初期化
 pygame.init()
 
-# 画面サイズ
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+# 画面設定
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("インベーダーゲーム")
-
-# 色の定義
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-ORANGE = (255, 165, 0)
-YELLOW_GREEN = (154, 205, 50)
-WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)
-BLUE = (0, 0, 255)
-
-
-# プレイヤークラス
-class Player:
-    def __init__(self):
-        self.x = SCREEN_WIDTH // 2
-        self.y = SCREEN_HEIGHT - 50
-        self.width = 40
-        self.height = 30
-        self.speed = 5
-        self.life = 3
-        self.alive = True
-        self.shot_count = 1
-
-    def move_left(self):
-        if self.x > 0:
-            self.x -= self.speed
-
-    def move_right(self):
-        if self.x < SCREEN_WIDTH - self.width:
-            self.x += self.speed
-
-    def draw(self, screen):
-        if self.alive:
-            pygame.draw.rect(
-                screen, YELLOW_GREEN, (self.x, self.y + 10, self.width, 10)
-            )
-            pygame.draw.rect(
-                screen, YELLOW_GREEN, (self.x + self.width // 2 - 5, self.y, 10, 10)
-            )
-            pygame.draw.rect(screen, YELLOW_GREEN, (self.x + 5, self.y + 20, 5, 10))
-            pygame.draw.rect(
-                screen, YELLOW_GREEN, (self.x + self.width - 10, self.y + 20, 5, 10)
-            )
-
-    def draw_life(self, screen):
-        for i in range(self.life):
-            screen.blit(heart_img, (10 + i * 35, 5))
-
-
-# 弾クラス
-class Bullet:
-    def __init__(self, x, y, speed_y, color, speed_x=0):
-        self.x = float(x)
-        self.y = float(y)
-        self.width = 5
-        self.height = 10
-        self.speed_y = speed_y
-        self.speed_x = float(speed_x)
-        self.color = color
-        self.active = True
-
-    def update(self):
-        self.y += self.speed_y
-        self.x += self.speed_x
-        if self.y < 0 or self.y > SCREEN_HEIGHT or self.x < 0 or self.x > SCREEN_WIDTH:
-            self.active = False
-
-    def draw(self, screen):
-        if self.active:
-            pygame.draw.rect(
-                screen, self.color, (int(self.x), int(self.y), self.width, self.height)
-            )
-            pygame.draw.rect(
-                screen, self.color, (self.x, self.y, self.width, self.height)
-            )
-
-    def check_collision(self, target):
-        if self.active and target.alive:
-            if (
-                self.x < target.x + target.width
-                and self.x + self.width > target.x
-                and self.y < target.y + target.height
-                and self.y + self.height > target.y
-            ):
-                self.active = False
-                if isinstance(target, Player):
-                    pass
-                elif isinstance(target, Enemy):
-                    target.alive = False
-                return True
-        return False
-
-
-# 画像の読み込み
-try:
-    enemy1_img = pygame.image.load("game/images/enemy1.png")
-    enemy1_img = pygame.transform.scale(enemy1_img, (40, 30))
-except pygame.error:
-    enemy1_img = pygame.Surface((40, 30))
-    enemy1_img.fill(RED)
-
-try:
-    enemy2_img = pygame.image.load("game/images/enemy2.png")
-    enemy2_img = pygame.transform.scale(enemy2_img, (40, 30))
-except pygame.error:
-    enemy2_img = pygame.Surface((40, 30))
-    enemy2_img.fill(ORANGE)
-
-try:
-    item_shot_img = pygame.image.load("game/items/shot.png")
-    item_shot_img = pygame.transform.scale(item_shot_img, (25, 25))
-except pygame.error:
-    item_shot_img = pygame.Surface((25, 25))
-    item_shot_img.fill(BLUE)
-
-try:
-    item_sub_shot_img = pygame.image.load("game/items/sub_shot.png")
-    item_sub_shot_img = pygame.transform.scale(item_sub_shot_img, (25, 25))
-except pygame.error:
-    item_sub_shot_img = pygame.Surface((25, 25))
-    item_sub_shot_img.fill(YELLOW)
-
-try:
-    item_score_x2_img = pygame.image.load("game/items/2.png")
-    item_score_x2_img = pygame.transform.scale(item_score_x2_img, (25, 25))
-except pygame.error:
-    item_score_x2_img = pygame.Surface((25, 25))
-    item_score_x2_img.fill(BLACK)
-
-try:
-    heart_img = pygame.image.load("game/images/heart.png")
-    heart_img = pygame.transform.scale(heart_img, (30, 30))
-except pygame.error:
-    heart_img = pygame.Surface((30, 30))
-    heart_img.fill(RED)
-
-
-# 敵クラス
-class Enemy:
-    def __init__(self, x, y, type_id):
-        self.x = x
-        self.y = y
-        self.width = 40
-        self.height = 30
-        self.alive = True
-        self.type_id = type_id
-        self.speed_y = 1
-        self.speed_x = 2 if type_id == 1 else 0
-        self.direction = 1
-        self.shoot_timer = random.randint(90, 180)
-
-    def update(self):
-        self.y += self.speed_y
-        if self.type_id == 1:
-            self.x += self.speed_x * self.direction
-            if self.x <= 0 or self.x >= SCREEN_WIDTH - self.width:
-                self.direction *= -1
-        self.shoot_timer -= 1
-
-    def should_shoot(self):
-        return self.shoot_timer <= 0
-
-    def reset_shoot_timer(self):
-        self.shoot_timer = random.randint(100, 200)
-
-    def draw(self, screen):
-        if self.alive:
-            if self.type_id == 0:
-                screen.blit(enemy1_img, (self.x, self.y))
-            else:
-                screen.blit(enemy2_img, (self.x, self.y))
-
-
-# アイテムクラス
-class Item:
-    def __init__(self, x, y, item_type="shot_up"):
-        self.x = x
-        self.y = y
-        self.width = 25
-        self.height = 25
-        self.speed = 2
-        self.active = True
-        self.item_type = item_type
-
-    def update(self):
-        self.y += self.speed
-        if self.y > SCREEN_HEIGHT:
-            self.active = False
-
-    def draw(self, screen):
-        if self.active:
-            if self.item_type == "shot_up":
-                screen.blit(item_shot_img, (self.x, self.y))
-            elif self.item_type == "sub_shot_up":
-                screen.blit(item_sub_shot_img, (self.x, self.y))
-            elif self.item_type == "score_x2":
-                screen.blit(item_score_x2_img, (self.x, self.y))
-
-    def check_collision(self, player):
-        if self.active and player.alive:
-            if (
-                self.x < player.x + player.width
-                and self.x + self.width > player.x
-                and self.y < player.y + player.height
-                and self.y + self.height > player.y
-            ):
-                self.active = False
-                return True
-        return False
-
-
-# サブ機体クラス
-class SubPlayer:
-    def __init__(self, player_ref, side_offset):
-        self.player_ref = player_ref
-        self.width = 30
-        self.height = 20
-        self.offset_y = 30
-        self.side_offset = side_offset
-        self.shoot_interval = 90
-        self.shoot_timer = self.shoot_interval
-        self.alive = True
-
-    def update(self):
-        self.x = (
-            self.player_ref.x
-            + (self.player_ref.width // 2)
-            + (self.side_offset * (self.player_ref.width // 2 + 10))
-            - (self.width // 2)
-        )
-        self.y = self.player_ref.y - self.offset_y
-
-        self.shoot_timer -= 1
-        bullets_fired = []
-        if self.shoot_timer <= 0:
-            self.shoot_timer = self.shoot_interval
-            bullets_fired.append(
-                Bullet(self.x + self.width // 2 - 2, self.y, -7, WHITE, 0)
-            )
-        return bullets_fired
-
-    def draw(self, screen):
-        pygame.draw.rect(screen, YELLOW_GREEN, (self.x, self.y + 10, self.width, 10))
-        pygame.draw.rect(
-            screen, YELLOW_GREEN, (self.x + self.width // 2 - 5, self.y, 10, 10)
-        )
 
 
 # ゲームのメインクラス
@@ -275,16 +41,14 @@ class Game:
         self.score = 0
         self.spawn_timer = 0
         self.game_over = False
-        self.player_name = "Player1"  # プレイヤー名の初期値
+        self.player_name = "Player1"
 
         self.next_enemy_add_score = 200
         self.next_speed_increase_score = 1000
-
         self.initial_spawn_interval = 60
         self.current_spawn_interval = self.initial_spawn_interval
         self.spawn_interval_decrease_threshold = 500
         self.spawn_decrease_amount = 5
-
         self.score_multiplier = 1
         self.score_multiplier_timer = 0
 
