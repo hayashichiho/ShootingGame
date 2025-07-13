@@ -1,7 +1,7 @@
 import random
 
 import pygame
-from config import ORANGE, RED, SCREEN_WIDTH
+from config import ORANGE, RED, SCREEN_WIDTH, LIGHTBLUE
 
 # 画像の読み込み
 try:
@@ -19,7 +19,7 @@ except pygame.error:
     enemy2_img.fill(ORANGE)
 
 try:
-    enemy3_img = pygame.image.load("game/images/enemy3.png")
+    enemy3_img = pygame.image.load("game/images/enemy2.png")
     enemy3_img = pygame.transform.scale(enemy3_img, (45, 35))
 except pygame.error:
     enemy3_img = pygame.Surface((45, 30))

@@ -1,5 +1,5 @@
 import pygame
-from config import BLACK, BLUE, ORANGE, RED, YELLOW
+from config import BLACK, BLUE, ORANGE, RED, YELLOW, LIGHTBLUE
 
 
 def load_image(path, size, fallback_color):
