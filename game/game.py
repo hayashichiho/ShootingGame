@@ -371,7 +371,7 @@ class Game:
                         print("サブ機体はこれ以上追加できません。") 
                 elif item.item_type == "score_x2":
                     self.score_multiplier = 2
-                    self.score_multiplier_timer = 10 * 60 
+                    self.score_multiplier_timer = 3 * 60 
                     print("スコア2倍！10秒間有効！")
                 self.items.remove(item)
 
