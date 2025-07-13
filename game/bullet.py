@@ -1,7 +1,10 @@
 import pygame
-from player import Player # Playerクラスのインポート
-from enemy import Enemy   # Enemyクラスのインポート
-from config import SCREEN_HEIGHT, SCREEN_WIDTH # SCREEN_WIDTH, SCREEN_HEIGHTのインポート
+from config import (  # SCREEN_WIDTH, SCREEN_HEIGHTのインポート
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+)
+from enemy import Enemy  # Enemyクラスのインポート
+from player import Player  # Playerクラスのインポート
 
 
 class Bullet:
@@ -40,7 +43,7 @@ class Bullet:
                 if isinstance(target, Player):
                     # プレイヤーはGameクラスでライフが管理されるため、
                     # ここではaliveを変更しない
-                    pass 
+                    pass
                 elif isinstance(target, Enemy):
                     target.take_damage()
                 return True
