@@ -2,6 +2,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 
 from flask import Flask, jsonify, render_template, request
 
@@ -137,12 +138,16 @@ def api_save_score():
         player_name = data.get("player_name", "Anonymous")
         score = data.get("score", 0)
 
+        # 日本時間で現在時刻を取得
+        JST = timezone(timedelta(hours=9))
+        now_jst = datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
+
         conn = sqlite3.connect("game_scores.db")
         cursor = conn.cursor()
 
         cursor.execute(
-            "INSERT INTO game_scores (player_name, score) VALUES (?, ?)",
-            (player_name, score),
+            "INSERT INTO game_scores (player_name, score, play_date) VALUES (?, ?, ?)",
+            (player_name, score, now_jst),
         )
 
         conn.commit()
