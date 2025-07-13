@@ -17,6 +17,7 @@ class GameCore:
         self.sounds = sounds
         self.player_name = player_name
         self.player = Player(self.images)
+
         self.reset_game()
 
     def reset_game(self):
@@ -27,7 +28,7 @@ class GameCore:
         self.enemy_bullets = []
         self.items = []
         self.sub_players = []
-        self.sub_shot_up_timers = []
+        self.sub_shot_up_timers = []  # タイマーをリストで管理
         self.score = 0
         self.spawn_timer = 0
         self.shot_up_timer = 0
@@ -179,12 +180,19 @@ class GameCore:
 
     def _play_sound(self, sound_name):
         """サウンドを再生する関数"""
-        if sound_name in self.sounds and self.sounds[sound_name]:
-            self.sounds[sound_name].play()
+        try:
+            if sound_name in self.sounds:
+                try:
+                    if sound_name in self.sounds and self.sounds[sound_name]:
+                        self.sounds[sound_name].play()
+                except Exception as e:
+                    print(f"即座音声再生エラー: {sound_name} - {e}")
+        except Exception as e:
+            print(f"音声再生エラー: {sound_name} - {e}")
 
     def _update_items(self):
         """アイテムを更新する関数"""
-        for item in self.items[:]:  # スライスでコピーを作成
+        for item in self.items[:]:
             item.update()
             if not item.active:
                 self.items.remove(item)

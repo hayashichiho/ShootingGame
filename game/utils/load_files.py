@@ -1,6 +1,11 @@
+import os
+
 import pygame
 
 from game.utils.config import BLACK, BLUE, LIGHTBLUE, ORANGE, RED, YELLOW
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+STATIC_DIR = os.path.join(BASE_DIR, "static", "resources")
 
 
 def load_image(path, size, fallback_color):
@@ -16,15 +21,25 @@ def load_image(path, size, fallback_color):
 
 def load_images():
     """ゲームで使用する画像をロードする。"""
-    enemy1_img = load_image("game/resources/images/enemy1.png", (40, 30), RED)
-    enemy2_img = load_image("game/resources/images/enemy2.png", (40, 30), ORANGE)
-    enemy3_img = load_image("game/resources/images/enemy3.png", (45, 35), LIGHTBLUE)
-    heart_img = load_image("game/resources/images/heart.png", (30, 30), RED)
-    item_shot_img = load_image("game/resources/images/shot.png", (25, 25), BLUE)
-    item_sub_shot_img = load_image(
-        "game/resources/images/sub_shot.png", (25, 25), YELLOW
+    enemy1_img = load_image(
+        os.path.join(STATIC_DIR, "images/enemy1.png"), (40, 30), RED
     )
-    item_score_x2_img = load_image("game/resources/images/2.png", (25, 25), BLACK)
+    enemy2_img = load_image(
+        os.path.join(STATIC_DIR, "images/enemy2.png"), (40, 30), ORANGE
+    )
+    enemy3_img = load_image(
+        os.path.join(STATIC_DIR, "images/enemy3.png"), (45, 35), LIGHTBLUE
+    )
+    heart_img = load_image(os.path.join(STATIC_DIR, "images/heart.png"), (30, 30), RED)
+    item_shot_img = load_image(
+        os.path.join(STATIC_DIR, "images/shot.png"), (25, 25), BLUE
+    )
+    item_sub_shot_img = load_image(
+        os.path.join(STATIC_DIR, "images/sub_shot.png"), (25, 25), YELLOW
+    )
+    item_score_x2_img = load_image(
+        os.path.join(STATIC_DIR, "images/2.png"), (25, 25), BLACK
+    )
 
     return {
         "enemy1": enemy1_img,
@@ -50,8 +65,8 @@ def load_sound(sound_path):
 
 def load_sounds():
     """ゲームで使用するサウンドをロードする。"""
-    player_hit_sound = load_sound("game/resources/sounds/break.mp3")
-    game_over_hit_sound = load_sound("game/resources/sounds/break_last.mp3")
+    player_hit_sound = load_sound(os.path.join(STATIC_DIR, "sounds/break.wav"))
+    game_over_hit_sound = load_sound(os.path.join(STATIC_DIR, "sounds/break_last.wav"))
 
     return {
         "player_hit": player_hit_sound,
