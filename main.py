@@ -5,8 +5,13 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 from flask import Flask, jsonify, render_template, request, send_from_directory
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///game_scores.db"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # ゲームプロセスを管理するための変数
 game_process = None
