@@ -6,7 +6,7 @@ import requests
 from game.core.game_core import GameCore
 from game.core.game_ui import GameUI
 from game.utils.config import SCREEN_HEIGHT, SCREEN_WIDTH
-from game.utils.load_files import load_images, load_sounds
+from game.utils.load_files import load_images
 
 
 def run(ui):
@@ -50,16 +50,13 @@ def save_score_to_server(ui):
 
 
 def main():
-    pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=1024)
     pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.set_num_channels(16)
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("SHOOTING GAME")
     images = load_images()
-    sounds = load_sounds()
     player_name = sys.argv[1] if len(sys.argv) > 1 else "Player1"
-    core = GameCore(images, sounds, player_name)
+    core = GameCore(images, player_name)
     ui = GameUI(core, screen)
     run(ui)
 

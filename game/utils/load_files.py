@@ -50,25 +50,3 @@ def load_images():
         "item_sub_shot": item_sub_shot_img,
         "item_score_x2": item_score_x2_img,
     }
-
-
-def load_sound(sound_path):
-    """サウンドファイルをロードする。"""
-    try:
-        sound = pygame.mixer.Sound(sound_path)
-        sound.set_volume(0.25)
-        return sound
-    except pygame.error:
-        print(f"{sound_path} が見つかりませんでした。サウンドは再生されません。")
-        return None
-
-
-def load_sounds():
-    """ゲームで使用するサウンドをロードする。"""
-    player_hit_sound = load_sound(os.path.join(STATIC_DIR, "sounds/break.wav"))
-    game_over_hit_sound = load_sound(os.path.join(STATIC_DIR, "sounds/break_last.wav"))
-
-    return {
-        "player_hit": player_hit_sound,
-        "game_over_hit": game_over_hit_sound,
-    }

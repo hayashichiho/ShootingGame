@@ -116,8 +116,7 @@ ShootingGame/
 ├── Readme.md              # このファイル
 ├── static/
 │   ├── resources/
-│   │   ├── images         # 画像素材
-│   │   └── sounds         # 効果音
+│   │   └── images         # 画像素材
 │   ├── css/
 │   │   ├── start.css      # スタート画面用デザイン
 │   │   └── ranking.css    # ランキング画面用デザイン

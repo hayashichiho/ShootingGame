@@ -11,10 +11,9 @@ from game.utils.config import SCREEN_HEIGHT, SCREEN_WIDTH, YELLOW
 class GameCore:
     """ゲームのコアロジックを管理するクラス"""
 
-    def __init__(self, images, sounds, player_name="Player1"):
+    def __init__(self, images, player_name="Player1"):
         """初期化関数"""
         self.images = images
-        self.sounds = sounds
         self.player_name = player_name
         self.player = Player(self.images)
 
@@ -167,8 +166,6 @@ class GameCore:
         # ライフが0になったかの判定
         if self.player.life <= 0:
             self._handle_game_over()
-        else:
-            self._play_sound("player_hit")
 
     def _handle_game_over(self):
         """ゲームオーバー処理"""
@@ -176,19 +173,6 @@ class GameCore:
             self.player.alive = False
             self.game_over = True
             print("ゲームオーバー")
-            self._play_sound("game_over_hit")
-
-    def _play_sound(self, sound_name):
-        """サウンドを再生する関数"""
-        try:
-            if sound_name in self.sounds:
-                try:
-                    if sound_name in self.sounds and self.sounds[sound_name]:
-                        self.sounds[sound_name].play()
-                except Exception as e:
-                    print(f"即座音声再生エラー: {sound_name} - {e}")
-        except Exception as e:
-            print(f"音声再生エラー: {sound_name} - {e}")
 
     def _update_items(self):
         """アイテムを更新する関数"""
@@ -323,8 +307,6 @@ class GameCore:
 
         if self.player.life <= 0:
             self._handle_game_over()
-        else:
-            self._play_sound("player_hit")
 
     def _adjust_spawn_interval(self):
         """敵生成間隔を調整する関数"""
