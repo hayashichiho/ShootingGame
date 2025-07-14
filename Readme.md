@@ -13,9 +13,11 @@
 
 ---
 
-## ゲームの起動方法
+### 注意
+#### 本ゲームはPygameによるデスクトップアプリです。
+---
 
-### ① ローカル起動手順
+## ゲームの起動方法
 
 1. このリポジトリをクローンまたはダウンロードします。
 
@@ -46,12 +48,6 @@
    flask db migrate -m "initial"
    flask db upgrade
    ```
-
-### ② Render.com デプロイ手順
-
-1. GitHubとRender.comを連携
-2. Webサービスとして設定
-3. `requirements.txt`を使用して自動デプロイ
 
 ---
 
@@ -99,12 +95,6 @@
 
 * pygame
 
-### デプロイ
-
-* Render.com
-* Docker
-* Procfile（for Gunicorn）
-
 ---
 
 ## ディレクトリ構成
@@ -142,10 +132,9 @@ ShootingGame/
 │       ├── __init__.py
 │       ├── config.py      # 設定値
 │       └── load_files.py  # 画像ロード
-├── templates/
-│       ├── start.html     # スタート画面HTML
-│       └── ranking.html   # ランキング画面HTML
-└── Dockerfile             # Docker構成
+└── templates/
+        ├── start.html     # スタート画面HTML
+        └── ranking.html   # ランキング画面HTML
 ```
 
 ---
