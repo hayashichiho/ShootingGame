@@ -141,7 +141,7 @@ ShootingGame/
 │   └── utils/
 │       ├── __init__.py
 │       ├── config.py      # 設定値
-│       └── load_files.py  # 画像・音声ロード
+│       └── load_files.py  # 画像ロード
 ├── templates/
 │       ├── start.html     # スタート画面HTML
 │       └── ranking.html   # ランキング画面HTML
