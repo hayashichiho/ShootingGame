@@ -52,6 +52,7 @@ def save_score_to_server(ui):
 def main():
     pygame.mixer.pre_init(frequency=44100, size=-16, channels=2, buffer=1024)
     pygame.init()
+    pygame.mixer.init()
     pygame.mixer.set_num_channels(16)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("SHOOTING GAME")
