@@ -2,10 +2,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 必要なシステムパッケージをインストール
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
+    python3-dev \
     libsdl2-dev \
     libsdl2-image-dev \
     libsdl2-mixer-dev \
